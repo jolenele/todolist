@@ -26,6 +26,20 @@ const getTaskById = (req, res) => {
     res.status(200).json(results.rows);
   });
 };
+const getTaskByDate = (req, res) => {
+  const { date } = req.body;
+
+  pool.query(
+    'SELECT tasks.task FROM tasks WHERE tasks.date = $1',
+    [date],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+};
 const createTask = (req, res) => {
   const { task, date, completed } = req.body;
 
@@ -183,9 +197,11 @@ const deleteTodo = (req, res) => {
     res.status(200).send(`Assignment deleted with ID: ${id}`);
   });
 };
+
 module.exports = {
   getTasks,
   getTaskById,
+  getTaskByDate,
   createTask,
   updateTask,
   deleteTask,
