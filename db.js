@@ -26,33 +26,36 @@ const getTaskById = (req, res) => {
     res.status(200).json(results.rows);
   });
 };
-const getTaskByDate = (req, res) => {
-  const { date } = req.body;
-
-  pool.query(
-    'SELECT tasks.task FROM tasks WHERE tasks.date = $1',
-    [date],
-    (error, results) => {
-      if (error) {
-        throw error;
+const getTaskByDate = async (req, res) => {
+  try {
+    const { date } = req.params;
+    pool.query(
+      'SELECT task FROM tasks WHERE date = date',
+      [date],
+      (results) => {
+        res.status(200).json(results.rows);
       }
-      res.status(200).json(results.rows);
-    }
-  );
+    );
+  } catch (err) {
+    console.log(err.message);
+    process.exit(1);
+  }
 };
-const createTask = (req, res) => {
-  const { task, date, completed } = req.body;
+const createTask = async (req, res) => {
+  try {
+    const { task, date } = req.body;
 
-  pool.query(
-    'INSERT INTO tasks (task, date, completed) VALUES ($1, $2, $3)',
-    [task, date, completed],
-    (error, results) => {
-      if (error) {
-        throw error;
+    pool.query(
+      'INSERT INTO tasks (task, date) VALUES ($1, $2)',
+      [task, date],
+      (results) => {
+        res.status(201).send(`Task added with ID: ${result.insertId}`);
       }
-      res.status(201).send(`Task added with ID: ${result.insertId}`);
-    }
-  );
+    );
+  } catch (err) {
+    console.log(err.message);
+    process.exit(1);
+  }
 };
 const updateTask = (req, res) => {
   const id = parseInt(req.params.id);
@@ -99,19 +102,24 @@ const getUserById = (req, res) => {
     res.status(200).json(results.rows);
   });
 };
-const createUser = (req, res) => {
-  const { name } = req.body;
+const createUser = async (req, res) => {
+  try {
+    const { name } = req.body;
 
-  pool.query(
-    'INSERT INTO users (name) VALUES ($1)',
-    [name],
-    (error, results) => {
-      if (error) {
-        throw error;
+    pool.query(
+      'INSERT INTO users (name) VALUES ($1)',
+      [name],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        res.status(201).send(`User added with ID: ${results.insertId}`);
       }
-      res.status(201).send(`User added with ID: ${results.insertId}`);
-    }
-  );
+    );
+  } catch (err) {
+    console.log(err.message);
+    process.exit(1);
+  }
 };
 const updateUser = (req, res) => {
   const id = parseInt(req.params.id);
@@ -158,19 +166,24 @@ const getTodoById = (req, res) => {
     res.status(200).json(results.rows);
   });
 };
-const createTodo = (req, res) => {
-  const { tasks_id, users_id } = req.body;
+const createTodo = async (req, res) => {
+  try {
+    const { tasks_id, users_id } = req.body;
 
-  pool.query(
-    'INSERT INTO todolist (tasks_id, users_id) VALUES ($1, $2)',
-    [tasks_id, users_id],
-    (error, results) => {
-      if (error) {
-        throw error;
+    pool.query(
+      'INSERT INTO todolist (tasks_id, users_id) VALUES ($1, $2)',
+      [tasks_id, users_id],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        res.status(201).send(`Assignment added with ID: ${result.insertId}`);
       }
-      res.status(201).send(`Assignment added with ID: ${result.insertId}`);
-    }
-  );
+    );
+  } catch (err) {
+    console.log(err.message);
+    process.exit(1);
+  }
 };
 const updateTodo = (req, res) => {
   const id = parseInt(req.params.id);
