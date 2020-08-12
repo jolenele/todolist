@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 // Routes tasks
 app.get('/tasks', db.getTasks);
 app.get('/tasks/:id', db.getTaskById);
-app.get('/tasks/date/:date', db.getTaskByDate);
 app.post('/tasks', db.createTask);
 app.put('/tasks/:id', db.updateTask);
 app.delete('/tasks/:id', db.deleteTask);
