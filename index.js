@@ -1,8 +1,11 @@
 const express = require('express');
+const http = require('http');
 const bodyParser = require('body-parser');
+
 const app = express();
+const server = http.createServer(app);
 const port = 3000;
-const db = require('./db');
+// const db = require('./db');
 
 app.use(bodyParser.json());
 app.use(
